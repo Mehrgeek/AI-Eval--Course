@@ -28,18 +28,12 @@
 **Rule:** Summaries must accurately reflect real competitor data and avoid invented numbers, markets, or claims.  
 **Signal:** When evaluated against the underlying competitor data, key facts (figures, markets, trends) in the summary match the source information with no material errors or hallucinations.
 
-
-
-
 ## 3. Strategic Trade-Offs, The Cost
 
-### Trade-off 1 · _Metric A ↔ Metric B_
+### Trade-off 1 · Provenance / Traceability ↔ Actionability
+We prioritize Actionability over Provenance when the two conflict.  
+If a summary must choose between adding another citation or delivering a clearer “so what,” we choose the actionable insight because analysts ultimately need decision-ready guidance.
 
-_We prioritize A over B because … (business justification)._
-
-### Trade-off 2 · _Metric C ↔ Metric D_
-
-_We prioritize C over D because … (business justification)._
-
----
-_Generated from the AI Evaluation Strategy Canvas, M1 lab tool, AI Evals Certification._
+### Trade-off 2 · Factual Reliability ↔ Speed / Latency
+We prioritize Factual Reliability over speed.  
+If ensuring factual accuracy requires additional processing time or stricter validation, we accept the latency cost because incorrect competitor data would directly harm analyst trust and decision quality.
