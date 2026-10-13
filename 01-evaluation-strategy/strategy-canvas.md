@@ -5,20 +5,31 @@
 >
 > Fill this with the **AI Evaluation Strategy Canvas** tool, then **Copy markdown** and paste it over this file. The headings below mirror the tool's output exactly.
 
-## 1. Product Strategy, The Context
+## 1. Product Strategy
+**Product:** Ascend IQ  
+**Target User:** Market Analysts  
+**Key Use Case:** Summarising competitor market intelligence (sales revenue, new markets, strategic moves)  
+**Value Proposition:** Fast, accurate summaries with clear provenance showing how the answer was generated.
 
-- **Target user:** _…_
-- **Key use case:** _…_
-- **Value proposition:** _…_
+## 2. User Promise
+**For market analysts, Ascend IQ promises to turn competitor market intelligence into fast, reliable, and fully‑traceable summaries so analysts can deliver confident insights to leadership without digging through dense data.**
 
-## 2. Measurements, The Execution
+## 3. Quality Bar (Trust Metrics)
 
-- **User promise.** _For [user], [product] promises to [outcome] so that [business value]._
-- **Top 3 trust metrics:**
-  - **_Metric 1_**, _definition / measurable signal_
-  - **_Metric 2_**, _definition / measurable signal_
-  - **_Metric 3_**, _definition / measurable signal_
-- **Why these three:** _…_
+### Metric 1 – Provenance / Traceability
+**Rule:** Summaries must clearly show where each key data point comes from, so analysts can verify and defend the insights.  
+**Signal:** For each numerical or factual claim about a competitor, the summary includes an explicit reference (e.g., source name, report, dataset, or link) that makes the data traceable.
+
+### Metric 2 – Actionability
+**Rule:** Summaries must go beyond description and highlight clear implications or recommended actions that analysts can use in reports or decisions.  
+**Signal:** Each summary contains at least one explicit, concrete insight (e.g., “This suggests…”, “Therefore, the analyst should…”) that can be directly used in a leadership briefing or strategy document.
+
+### Metric 3 – Factual Reliability
+**Rule:** Summaries must accurately reflect real competitor data and avoid invented numbers, markets, or claims.  
+**Signal:** When evaluated against the underlying competitor data, key facts (figures, markets, trends) in the summary match the source information with no material errors or hallucinations.
+
+
+
 
 ## 3. Strategic Trade-Offs, The Cost
 
