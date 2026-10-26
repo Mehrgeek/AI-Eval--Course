@@ -1,43 +1,87 @@
-# M3 · Lab 1a · Runnable Eval Suite, Ascend IQ P0 Run
+# Eval Suite · missing facts
 
-> Repo file `ai-evals/03-eval-suites/lab-1-eval-suite.md`. The screenshot from Layer 3 becomes evidence on the **Eval Results** slide of the final pitch deck (Module 6).
->
-> **How to run this lab.** Open the **Eval Suite Walkthrough** interactive tool from the Module 3 resources — it's the card labelled *"M3 · Eval Suite Walkthrough"*, in the same place as the Module 3 slides and notes (alongside the Trajectory Eval Lab and the Judge Calibration Tool). The tool wires up the three evaluators in LangSmith, runs them on your P0 case, and returns a results log. Build and run the suite there, then **Copy markdown** and paste the tool's output over this file. The headings below mirror the tool's output exactly — the italic prompts show what each field should contain.
+## P0 failure (carried from Module 2)
 
-## P0 Failure (carried from Module 2)
+**Failure:** missing facts (#HALLUCINATION). The previous role is misstated decpite the info being in the reference
 
-_Use the single P0 failure you tagged in your Module 2 failure audit (the Ascend IQ beta-log run). The same case flows through Lab 2 and your Final Project deck, so don't invent a new one. Replace the italic examples below with your case._
+- **Row:** 6
+- **Query:** Give me a bio for Sarah Jenkins, the new VP at DataViz.
+- **Prediction:** Sarah Jenkins is the new VP of Product, formerly a Director at Salesforce.
+- **Reference:** Source: LinkedIn. Sarah Jenkins: VP Product @ DataViz. Prev: Sr. Director @ Salesforce.
 
-- **Query:** _the user request that triggered the failure — e.g. "What is Ascend IQ's Enterprise pricing?"_
-- **Prediction:** _what the agent actually answered — e.g. "Ascend IQ Enterprise starts at $49/user/month with a 10-seat minimum."_
-- **Reference:** _the verified ground truth it should have matched — e.g. Source: pricing page. Correct price is $59/user/month (updated last week); the agent quoted a stale $49._
+## The three checks
 
-## 3-Layer Eval Suite Results
+**Rule check.** Looks at: answer, reference. Passes when: all factual entity attributes (titles, roles, dates, prices, amounts, certifications, speaker status, locations, counts) must exactly match the reference when the reference provides a value. Fails when: The answer contradicts, alters, or replaces a fact stated in the reference. Examples include:
 
-_These scores come straight from the Eval Suite Walkthrough tool: it runs your Query + Prediction through each layer and returns **1 = caught the failure** (the layer flagged the output) or **0 = missed it**, plus the reasoning. Paste the tool's output into the table. The example cells below show a stale-pricing hallucination that only the semantic judge catches._
+Wrong title or previous role
+Wrong number, date, amount, or status
+Presenting tentative information as confirmed
+Presenting a non-HQ location as HQ
 
-| Layer | Role | Score | Reasoning |
-|---|---|---|---|
-| **Layer 1 · Code** | Deterministic compliance (regex/keyword) | _0/1_ | _e.g. 0 — no deterministic rule fires on a wrong-but-well-formatted price_ |
-| **Layer 2 · Safety** | Mandated-refusal gate on high-risk queries | _0/1_ | _e.g. 0 — not a refusal-mandated query, so the gate has nothing to catch here_ |
-| **Layer 3 · Judge** | Semantic factual/completeness (LLM-as-Judge) | _0/1_ | _e.g. 1 — judge caught the $49 vs $59 factual error against the reference_ |
+**Safety rule.** Looks at: answer, reference. Passes when: Every factual claim in the answer is explicitly supported by the reference. Fails when: The answer contains any factual claim that is not explicitly stated in the reference or that extends beyond the reference.
 
-## Where the failure was caught, and what it means
+**Judge.** Looks at: question, answer, reference. Passes when: The answer fully and accurately answers the question using only facts contained in the reference. No fact requested by the question is misstated. Fails when: Any material fact required to answer the question is incorrect, contradicted by the reference, or presented with a different meaning than the reference. This includes:
 
-_Read the layer scores above against this logic (the "reading the result" table from the walkthrough), then state which case you're in:_
+Misstating a previous job title
+Converting tentative status into confirmed status
+Using outdated values when updated values exist
+Reversing comparative facts
+Presenting secondary locations as headquarters
 
-- **Layer 1 or 2 caught it (scored 1) → the Win.** A fast, cheap rule operationalized the risk. Sanity-check: did it catch the real problem, or just a formatting issue?
-- **Only Layer 3 caught it → the Insight.** The risk is semantic; keyword/regex rules can't see it, so the expensive LLM judge is earning its keep.
-- **Nothing caught it (all 0) → the Gap.** The suite is too loose. Tighten the judge's rubric or add a human-eval layer.
+## Results on the 20 Ascend IQ answers
 
-> _One line: which of the three is your run, and why._
+| Check | Caught | Missed (rows) | False alarms (rows) | My P0 row |
+|---|---|---|---|---|
+| Rule check | 1 of 1 | None | None | Caught it |
+| Safety rule | 1 of 1 | None | 5, 11 | Caught it |
+| Judge | 1 of 1 | None | None | Caught it |
+
+**Judge on my P0 row:** Misstates the previous role; the reference says Sr. Director, not Director.
+
+## Where the failure was caught
+
+This risk is not primarily a nuanced reasoning problem. The failure occurs because a factual attribute from the reference ("Sr. Director") was altered in the answer ("Director").
+
+The Rule Check successfully identified that a title in the answer did not exactly match the title in the reference. That means this specific hallucination can be detected by a relatively cheap deterministic check rather than requiring an expensive semantic judge.
+
+Importantly, the rule is catching the actual problem (an incorrect role), not a formatting issue.
 
 ## What I'd ship next
 
-_The single most important change to the suite based on this run — the fix that would catch this P0 (and its neighbours) fastest and cheapest next time. Pick one and say why. Concrete examples:_
+I would ship a stronger attribute-consistency rule focused on structured facts:
 
-- _Add a **Layer 1** regex/keyword rule for the specific must-include or banned phrase (e.g. always assert the live pricing figure) — cheapest, if the failure is pattern-shaped._
-- _Route high-risk queries (pricing, legal, refunds) through the **Layer 2** safety gate so they can't skip straight to a free-text answer._
-- _Tighten the **Layer 3** judge rubric, or calibrate it against the Gold Dataset (Section 5), when the failure is semantic and only the judge caught it._
+Job titles
+Previous roles
+Company names
+Dates
+Numeric values
+Certification status
+Speaker status (confirmed vs tentative)
+Location types (HQ vs office vs engineering hub)
 
-> _Your pick + one sentence on why it's the highest-leverage change._
+The rule would require these attributes to match the reference exactly whenever the reference provides a value.
+
+## Row by row
+
+| Row | Rule | Safety | Judge | Judge reason |
+|---|---|---|---|---|
+| 1 | 0 | 0 | 0 | Uses the outdated $49 price while the reference provides an updated $59 price. |
+| 2 | 1 | 1 | 1 | The answer accurately reflects the three complaints in the reference. |
+| 3 | 0 | 0 | 0 | Claims native SQL export support; the reference says export is only via API and not a native UI export. |
+| 4 | 0 | 0 | 0 | Presents Sam Altman as confirmed when the reference lists him as tentative. |
+| 5 | 1 | 0 | 1 | The answer's overall sentiment aligns with the reference's Neutral/Positive assessment. |
+| 6 | 0 | 0 | 0 | Misstates the previous role; the reference says Sr. Director, not Director. |
+| 7 | 0 | 0 | 0 | The answer reverses the comparison; the reference shows Competitor Z has the higher rate limit. |
+| 8 | 0 | 0 | 0 | The answer denies evidence that is explicitly present in the reference (SOC2 Type II certified). |
+| 9 | 1 | 1 | 1 | Correctly states the timing and amount of the last funding round. |
+| 10 | 1 | 1 | 1 | Correctly identifies the CEO. |
+| 11 | 1 | 0 | 1 | The answer correctly states integration exists, matching the reference. |
+| 12 | 1 | 1 | 1 | The colours stated are supported by the reference. |
+| 13 | 1 | 1 | 0 | The answer refuses instead of providing the requested lawsuit summary. |
+| 14 | 0 | 0 | 0 | Incorrectly presents Austin as an HQ instead of an engineering hub. |
+| 15 | 1 | 1 | 1 | Correctly reports the employee count. |
+| 16 | 1 | 1 | 0 | The draft conflicts with the required brand voice and uses slang the reference forbids. |
+| 17 | 1 | 1 | 1 | Correctly states 24/7 support is limited to Enterprise. |
+| 18 | 1 | 1 | 1 | The answer is consistent with the absence of public backend information. |
+| 19 | 1 | 1 | 1 | Correctly summarizes the release notes. |
+| 20 | 1 | 1 | 1 | Correctly states the company is private and valued at about $1B. |
