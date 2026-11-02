@@ -1,26 +1,37 @@
-# Lab 2, Ascend IQ Budget Crisis
-
-> Repo file `ai-evals/05-scale/lab-2-budget-crisis.md`. Allocate Level 1/2/3 coverage across the 5 failure modes under the **$200K/quarter cap** with **max 3 at Level 3**.
->
-> Fill this with the **Budget Crisis Tool**, then **Copy markdown** and paste it over this file. The headings below mirror the tool's output exactly.
+# Module 5 · Eval Budget · Ascend IQ
 
 **Quarterly budget cap:** $200,000
-**Total Level 3 spend:** _$… (… of max 3 L3 slots used)_
+**Online eval spend:** $0 (0 of at most 3 online evals)
 
-## Portfolio decision grid
+## Budget
 
 | Failure | Trust metric | Risk | Level | Cost |
-|---|---|---|---|---|
-| Data Fabrication | Hallucination Rate | P0 | _L1 / L2 / L3_ | _$…_ |
-| Context Specificity | UX Trust | P1 | _L1 / L2 / L3_ | _$…_ |
-| Source Attribution Failure | Robustness | P1 | _L1 / L2 / L3_ | _$…_ |
-| Data Bias | Fairness | P2 | _L1 / L2 / L3_ | _$…_ |
-| Cost Overruns | Latency | P3 | _L1 / L2 / L3_ | _$…_ |
+| --- | --- | :---: | :---: | ---: |
+| Data Fabrication | Hallucination Rate | P0 | Code-based check | $4,250 |
+| Context Specificity | Robustness | P1 | Periodic audit | $7,000 |
+| Overconfident Tone | UX Trust | P1 | Code-based check | $3,250 |
+| Data Bias | Fairness | P2 | Periodic audit | $5,500 |
+| Slow Answers | Latency | P3 | Code-based check | $1,250 |
 
-_Reference L3 costs: Hallucination $85K · Context $70K · Attribution $65K · Bias $55K · Latency $25K. L2 ≈ 10% of L3, L1 ≈ 5% of L3._
+## Downgrades
 
-## Fallback methods (non-Level 3 items)
+### Code-based check · Data Fabrication (Hallucination Rate · P0)
+- **Cheaper check:** Code-based check: Rule check on every release.
+- **Why it’s enough:** Check generated summaries against the source articles and flag competitor prices, review counts, and other numerical claims that do not appear in the source. This catches many fabrication errors at a much lower cost than continuous online evaluation and provides reasonable protection until a full online eval is funded.
 
-### L_n_ · _Failure name_ (_metric_ · _risk_)
-- **Method:** _the cheaper fallback you'll run instead of L3_
-- **Why this fallback is defensible:** _the story you could defend in a customer incident review — especially if you downgraded a P0/P1._
+### Periodic audit · Context Specificity (Robustness · P1)
+- **Cheaper check:** Periodic audit (weekly sample review)
+- **Why it’s enough:** Review a weekly sample of prompts and answers to check whether the response followed the user's specific request, such as focusing on negative reviews when asked. Context-specificity failures are usually easy for human reviewers to spot, so a regular audit can catch trends without the cost of scoring all live traffic.
+
+### Code-based check · Overconfident Tone (UX Trust · P1)
+- **Cheaper check:** Code-based check (rule check on every release)
+- **Why it’s enough:** Use a rule check to flag answers that express uncertainty-sensitive topics as definite facts, such as using absolute language ("definitely", "always", "will") when the evidence is incomplete. Overconfident tone is often identifiable through language patterns, making a lightweight rule check a cost-effective way to catch many cases before release without paying for continuous live-traffic evaluation.
+
+### Periodic audit · Data Bias (Fairness · P2)
+- **Cheaper check:** Periodic audit (weekly sample review)
+- **Why it’s enough:** Review a weekly sample of summaries covering both US and APAC sources and compare the quality, completeness, and citation patterns. Because this is a P2 fairness risk, periodic human review is usually sufficient to detect systematic regional bias before it becomes a significant issue, while costing much less than continuous online evaluation.
+
+### Code-based check · Slow Answers (Latency · P3)
+- **Cheaper check:** Code-based check (latency test on every release)
+- **Why it’s enough:** Automatically measure response times on a set of representative multi-step questions during each release. Flag any test that exceeds the 10-second target. Because latency is easy to measure objectively, a rule-based performance check provides reliable coverage at a much lower cost than continuous online evaluation.
+
