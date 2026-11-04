@@ -4,7 +4,7 @@
 
 | Product | Hallucination Rate | Fairness | Latency | UX Trust | Robustness |
 |---|---|---|---|---|---|
-| Competitor Signal Tracker | ❌ Gap | ❌ Gap | ✅ Covered | ❌ Gap | ⚠️ Partial |
+| Competitor Signal Tracker |  Gap |  Gap |  Covered |  Gap |  Partial |
 
 ## What Runs Today
 
@@ -25,13 +25,13 @@ The tracker produces summaries used by sales and strategy teams. A made-up compe
 
 The feedback changes three things:
 
-UX Trust should be ⚠️ Partial, not ❌ Gap
+UX Trust should be  Partial, not  Gap
 
 You do have a style check for casual or alarmist tone.
 That is a UX trust check, just not a complete one.
 So a trust-related evaluation exists, making it partial coverage.
 
-Robustness should be ❌ Gap, not ⚠️ Partial
+Robustness should be  Gap, not  Partial
 
 Nothing you've described tests whether the tracker handles difficult, unusual, or edge-case inputs.
 The latency timer is not a robustness check.
@@ -48,10 +48,10 @@ Threshold: e.g., fail if >5% contain unsupported claims
 
 So the revised row would be:
 
-Hallucination Rate: ❌ Gap
-Fairness: ❌ Gap
-Latency: ✅ Covered
-UX Trust: ⚠️ Partial
-Robustness: ❌ Gap
+Hallucination Rate:  Gap
+Fairness:  Gap
+Latency:  Covered
+UX Trust:  Partial
+Robustness:  Gap
 
 The most important improvement is not actually the marks. It's adding a specific hallucination eval with data, cadence, and pass/fail threshold, because that's what a manager will look for when you say it's the highest-priority gap.
