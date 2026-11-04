@@ -1,47 +1,25 @@
-# Ship/Hold Memo · Ascend IQ
+# Ship-or-Hold Memo · Ascend IQ
 
-> Repo file `ai-evals/06-culture/lab-1-ship-hold-memo.md`. A Pyramid-Principle executive memo: the recommendation comes **first**.
->
-> Fill this with the **Ship/Hold Memo Builder**, then **Copy markdown** and paste it over this file. The headings below mirror the tool's output exactly.
-
-> **Decision:** 🚀 SHIP _(or 🛑 HOLD)_
-
-**To:** _[CPO] · cc Eng Lead · Trust & Safety_
-**From:** _[Your Name] · AI Evals Cohort · [Date]_
+> **Decision:** HOLD
 
 ## The Answer
 
-_First sentence = the recommendation and the business reason. Do not bury it._
+The highest-priority risk is hallucination (7/20 missing facts and 7/20 made-up facts, both P0), and while the threshold requires 100% detection of P0 cases and the rule check caught 1/1 identified P0 case, the coverage matrix still shows Hallucination Rate: X Gap as the highest-priority unresolved coverage area, meaning the release criteria do not yet demonstrate complete evaluation coverage for the most critical business risk.
 
 ## The Arguments
 
-### 1. _Argument pillar title_
+### 1. The hallucination which is my highest risk is happening too often
 
-_…_
+Evidence: P0 hallucination failures occurred 7/20 times for missing facts and 7/20 times for made-up facts (both rated HIGH frequency).
 
-### 2. _Argument pillar title_
+### 2. The most important risk area still has a coverage gap.
 
-_…_
+Evidence: The Coverage Matrix shows Hallucination Rate = X Gap, and the tracker identifies hallucinations as the highest-priority risk to address next.
 
-### 3. _Argument pillar title_
+### 3. The release threshold is very tight and cannot tolerate missed P0 cases
 
-_…_
-
-## Evidence · Trust Metrics
-
-```
-- Metric: result (Gate: bar) PASS/FAIL · Source
-- … cite exact numbers from M2–M5 (hallucination rate vs gate, factual grounding %, bias coverage %, p95 latency)
-```
-
-## Business Risk
-
-_Quantified SHIP-path vs HOLD-path risk (revenue, churn, competitive window)._
+Evidence: The ship threshold requires 100% detection of P0 cases (1 of 1 caught), and releases must fail if any P0 case is missed.
 
 ## Next Step · Decision Needed
 
-_A specific decision request with a deadline — e.g. "Approve the Hold rollback by Friday to keep the Q3 launch window."_
-
-## Reflection
-
-_What defining "good enough" forced you to confront._
+Please approve one sprint to implement the factual-accuracy evaluation and release gate needed to close our hallucination coverage gap. I'd like approval by the end of this sprint so we can make an informed release decision based on complete coverage of our highest-priority risk.
