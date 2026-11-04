@@ -13,7 +13,7 @@
 
 ## After the pushback
 
-: Row 14. This is a core-task failure in a market-intelligence product. Persistent false refusals will drive user frustration and churn faster than most tone or latency issues, yet you've treated it as a non-blocking advisory.
+Row 14. This is a core-task failure in a market-intelligence product. Persistent false refusals will drive user frustration and churn faster than most tone or latency issues, yet you've treated it as a non-blocking advisory.
 
 ## Sample Interactions
 
